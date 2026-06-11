@@ -1,0 +1,91 @@
+# Forge Teamwork Graph data connector — ingests CSV rows into Teamwork Graph
+# so they become discoverable in Rovo Search / Chat / Agents.
+# NOTE: Teamwork Graph connectors are currently only available for apps
+# installed into Jira.
+
+permissions:
+  scopes:
+    - write:object:jira
+    - read:object:jira
+    - delete:object:jira
+    - storage:app
+  external:
+    fetch:
+      backend:
+        # Allowlist the host(s) that serve your CSV. Replace with your real host.
+        - "https://your-csv-host.example.com"
+
+modules:
+  graph:connector:
+    - key: csv-connector
+      name: CSV Connector
+      icons:
+        light: https://developer.atlassian.com/platform/forge/images/icons/issue-panel-icon.svg
+        dark: https://developer.atlassian.com/platform/forge/images/icons/issue-panel-icon.svg
+      objectTypes:
+        - atlassian:document
+      capabilities:
+        replicatesPermissions: false   # all objects are site-wide visible
+        syncFidelity: upsert           # update/insert on each run (no delete mirroring yet)
+        supportsIncrementalSync: false # full sync only for now
+      datasource:
+        formConfiguration:
+          instructions:
+            - Provide a publicly reachable CSV URL and the column mapping below.
+          form:
+            - key: connectionDetails
+              type: header
+              title: Connection details
+              description: CSV location and column mapping
+              properties:
+                - key: csvUrl
+                  label: CSV URL
+                  type: string
+                  isRequired: true
+                - key: idColumn
+                  label: ID column
+                  type: string
+                  isRequired: true
+                - key: titleColumn
+                  label: Title column
+                  type: string
+                  isRequired: true
+                - key: urlColumn
+                  label: URL column
+                  type: string
+                  isRequired: false
+                - key: bodyColumn
+                  label: Body column
+                  type: string
+                  isRequired: false
+                - key: updatedAtColumn
+                  label: Updated-at column
+                  type: string
+                  isRequired: false
+          validateConnection:
+            function: validateConnectionFn
+        onConnectionChange:
+          function: onConnectionChangeFn
+
+  scheduledTrigger:
+    - key: csv-full-sync
+      function: fullSyncFn
+      interval: hour
+
+  webtrigger:
+    - key: csv-ingest-webtrigger
+      function: fullSyncFn
+
+  function:
+    - key: validateConnectionFn
+      handler: index.validateConnection
+    - key: onConnectionChangeFn
+      handler: index.onConnectionChange
+    - key: fullSyncFn
+      handler: index.fullSync
+
+app:
+  runtime:
+    name: nodejs22.x
+  # Run `forge register` after cloning to generate your own app id, e.g.:
+  # id: ari:cloud:ecosystem::app/00000000-0000-0000-0000-000000000000

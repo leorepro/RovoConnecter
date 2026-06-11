@@ -1,0 +1,24 @@
+{
+  "name": "rovo-csv-connector",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Forge Teamwork Graph data connector that ingests CSV data into Rovo (Search / Chat / Agents)",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "forge lint",
+    "deploy": "forge deploy",
+    "install:app": "forge install"
+  },
+  "dependencies": {
+    "@forge/api": "^4.0.0",
+    "@forge/kvs": "^1.0.0",
+    "@forge/teamwork-graph": "^4.2.7"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
+  }
+}

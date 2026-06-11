@@ -1,0 +1,8 @@
+node_modules/
+dist/
+*.log
+.env
+.forge/
+
+# Internal/reference docs — do not publish
+*.pdf
