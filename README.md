@@ -21,6 +21,8 @@ Teamwork Graph → Rovo (Search / Chat / Agents)
 
 > **Demo:** with a U.S. cities CSV connected, asking Rovo *"Wichita"* returns the record (City: Wichita, State: KS), attributes it to the connector, and even surfaces the related *"Wichita Falls"*.
 
+> 📚 **Built by following Atlassian's official [forge-skills](https://github.com/atlassian/forge-skills)** — see [`skills/forge-connector`](https://github.com/atlassian/forge-skills/tree/main/skills/forge-connector), which documents the correct `graph.setObjects({ objects, connectionId })` ingestion pattern.
+
 ## Features
 
 - CSV ingestion via a **configurable URL** (Forge external fetch)
